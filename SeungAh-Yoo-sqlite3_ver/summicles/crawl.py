@@ -1,3 +1,4 @@
+from pyvirtualdisplay import Display
 # selenium 임포트
 from selenium import webdriver
 import schedule
@@ -34,143 +35,161 @@ def crawl_data():
     now = datetime.datetime.now()
     crawl_time = now.strftime('%Y. %m. %d. %H:%M')
 
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # 실행 했을 때 브라우저가 실행되지 않는다.
+    with Display():
+        # options = Options()
+        # options.add_argument("--headless")  # 실행 했을 때 브라우저가 실행되지 않는다.
+        # firefoxOptions = webdriver.FirefoxOptions()
+        # firefoxOptions.set_headless()
 
-    # webdriver 설정(Chrome, Firefox 등) - Headless 모드
-    browser = webdriver.Chrome('D:/webdriver/chrome/chromedriver.exe', options=chrome_options)
+        # firefox path
+        # path = "D:/webdriver/firefox/geckodriver.exe"
+        # chrome path
+        # path = 'D:/webdriver/chrome/chromedriver.exe'
 
-    # webdriver 설정(Chrome, Firefox 등) - 일반 모드
-    # browser = webdriver.Chrome('D:/webdriver/chrome/chromedriver.exe')
+        # webdriver 설정(Chrome, Firefox 등) - Headless 모드
+        # browser = webdriver.Firefox(executable_path=path, firefox_options=firefoxOptions)
 
-    # 크롬 브라우저 내부 대기
-    browser.implicitly_wait(5)
+        # webdriver 설정(Chrome, Firefox 등) - 일반 모드
+        # browser = webdriver.Firefox(executable_path=path)
 
-    # 브라우저 사이즈
-    browser.set_window_size(1920, 1280)  # maximize_window(), minimize_window()
+        # webdriver pythonanywhere version
+        browser = webdriver.Firefox(capabilities={"alwaysMatch": {"timeouts": {"script": 150000}}})
 
-    # 페이지 이동
-    browser.get('https://news.daum.net/ranking/popular')
-
-    # 1차 페이지 내용
-    # print('Before Page Contents : {}'.format(browser.page_source))
-
-    # 현재 페이지의 기사 순서
-    nth_news = 1
-
-    # 한 페이지에서 크롤링할 기사 수
-    target_crawl_news_num = 50
-
-    while nth_news <= target_crawl_news_num:
-        # 초기화
-        link = None,
-        category = None,
-        title = None,
-        article_date = None,
-        img = None,
-        contents = None,
-        crawl_time = None,
-        newspaper = None,
-        headline = None
-
-        browser.implicitly_wait(10)
-
-        # headline 저장
-        soup = BeautifulSoup(browser.page_source, 'html.parser')
-        headline = soup.select('#mArticle > div.rank_news > ul.list_news2 > li:nth-child({}) > div.cont_thumb > div > span'.format(nth_news))[0].text.strip()
-        del soup
-
-        # 페이지 이동 클릭
         try:
-            btn = browser.find_element_by_css_selector('#mArticle > div.rank_news > ul.list_news2 > li:nth-child({}) > div.cont_thumb > strong > a'.format(nth_news))
-            browser.execute_script('arguments[0].click();', btn)
-        except TimeoutException:
-            nth_news += 1
-            continue
+            # 크롬 브라우저 내부 대기
+            browser.implicitly_wait(5)
 
-        # bs4 초기화
-        soup = BeautifulSoup(browser.page_source, 'html.parser')
+            # 페이지 이동
+            browser.get('https://news.daum.net/ranking/popular')
+            print('success')
+            time.sleep(120)
 
-        # 소스코드 정리
-        # print(soup.prettify)
+            # 1차 페이지 내용
+            # print('Before Page Contents : {}'.format(browser.page_source))
 
-        # 필요 정보 추출(news_comp, title, date, img, contents, link)
-        # 도중에 문제가 있다면 크롤링 하지 않고 넘어감.
-        try:
-            # 페이지 번호 출력
-            print('****** {}th New ******'.format(nth_news))
-            print(headline)
-            browser.implicitly_wait(10)
-            # category
-            category = soup.select('div#kakaoContent > h2')[0].text.strip()
-            print(category)
-            # newspaper
-            newspaper = soup.select('div.head_view > em > a >img')[0]['alt']
-            print(newspaper)
-            # title
-            title = soup.select('div.head_view > h3')[0].text.strip()
-            print(title)
-            # article_date
-            article_date = soup.select(
-                'div.head_view > span.info_view > span.txt_info > span.num_date')[0].text.strip()
-            print(article_date)
-            # contents
-            contents_lists = soup.select(
-                'div#harmonyContainer > section > [dmcf-ptype="general"]')
-                    # 여러 문장으로 나눠서 온 content들을 하나의 문장으로 합친다.
-            contents = ''
-            for content in contents_lists:
-                contents += content.text.strip() + '\n'
-            print(contents)
-            # link
-            link = soup.select(
-                'div.copyUrl > div.sns_copyurl > a.link_copyurl > span:nth-child(2)')[0].text.strip()
-            print(link)
-            # 이미지가 없는 기사일 경우 오류처리
-            try:
-                img = soup.select('figure.figure_frm.origin_fig > p.link_figure > img')[
-                    0]['data-org-src']
-            except IndexError as e:
-                img = 0
-            if img:
-                print(soup.select('figure.figure_frm.origin_fig > p.link_figure > img')[0]['data-org-src'])
-        except IndexError as e:
-            nth_news += 1
-            del soup
-            continue
+            # 현재 페이지의 기사 순서
+            nth_news = 1
+
+            # 한 페이지에서 크롤링할 기사 수
+            target_crawl_news_num = 50
+
+            while nth_news <= target_crawl_news_num:
+                # 초기화
+                link = None,
+                category = None,
+                title = None,
+                article_date = None,
+                img = None,
+                contents = None,
+                crawl_time = None,
+                newspaper = None,
+                headline = None
+
+                browser.implicitly_wait(10)
+
+                # headline 저장
+                soup = BeautifulSoup(browser.page_source, 'html.parser')
+                headline = soup.select('#mArticle > div.rank_news > ul.list_news2 > li:nth-child({}) > div.cont_thumb > div > span'.format(nth_news))
+                del soup
+
+                # 페이지 이동 클릭
+                try:
+                    btn = browser.find_element_by_css_selector('#mArticle > div.rank_news > ul.list_news2 > li:nth-child({}) > div.cont_thumb > strong > a'.format(nth_news))
+                    browser.execute_script('arguments[0].click();', btn)
+                    time.sleep(3)
+                except TimeoutException as e:
+                    print(e)
+                    nth_news += 1
+                    continue
+
+                # bs4 초기화
+                soup = BeautifulSoup(browser.page_source, 'html.parser')
+
+                # 소스코드 정리
+                # print(soup.prettify)
+
+                # 필요 정보 추출(news_comp, title, date, img, contents, link)
+                # 도중에 문제가 있다면 크롤링 하지 않고 넘어감.
+                try:
+                    browser.implicitly_wait(3)
+                    # 페이지 번호 출력
+                    print('****** {}th New ******'.format(nth_news))
+                    print(headline)
+                    # category
+                    category = soup.select('div#kakaoContent > h2')[0].text.strip()
+                    print(category)
+                    # newspaper
+                    newspaper = soup.select('div.head_view > em > a >img')[0]['alt']
+                    print(newspaper)
+                    # title
+                    title = soup.select('div.head_view > h3')[0].text.strip()
+                    print(title)
+                    # article_date
+                    article_date = soup.select(
+                        'div.head_view > span.info_view > span.txt_info > span.num_date')[0].text.strip()
+                    print(article_date)
+                    # contents
+                    contents_lists = soup.select(
+                        'div#harmonyContainer > section > [dmcf-ptype="general"]')
+                            # 여러 문장으로 나눠서 온 content들을 하나의 문장으로 합친다.
+                    contents = ''
+                    for content in contents_lists:
+                        contents += content.text.strip() + '\n'
+                    print(contents)
+                    # link
+                    link = soup.select(
+                        'div.copyUrl > div.sns_copyurl > a.link_copyurl > span:nth-child(2)')[0].text.strip()
+                    print(link)
+                    # 이미지가 없는 기사일 경우 오류처리
+                    try:
+                        img = soup.select('figure.figure_frm.origin_fig > p.link_figure > img')[
+                            0]['data-org-src']
+                    except IndexError as e:
+                        img = 0
+                    if img:
+                        print(soup.select('figure.figure_frm.origin_fig > p.link_figure > img')[0]['data-org-src'])
+                except IndexError as e:
+                    print(e)
+                    nth_news += 1
+                    del soup
+                    # 페이지 뒤로 가기
+                    time.sleep(5)
+                    browser.back()
+                    continue
 
 
-        item_obj = {
-            'link': link,
-            'category': category,
-            'title': title,
-            'article_date': article_date,
-            'img': img,
-            'contents': contents,
-            'crawl_time': crawl_time,
-            'newspaper': newspaper,
-            'headline': headline
-        }
+                item_obj = {
+                    'link': link,
+                    'category': category,
+                    'title': title,
+                    'article_date': article_date,
+                    'img': img,
+                    'contents': contents,
+                    'crawl_time': crawl_time,
+                    'newspaper': newspaper,
+                    'headline': headline
+                }
 
-        result.append(item_obj)
+                result.append(item_obj)
 
-        # 페이지 뒤로 가기
-        time.sleep(5)
-        browser.back()
+                # 페이지 뒤로 가기
+                time.sleep(2)
+                browser.back()
 
-        nth_news += 1
+                nth_news += 1
 
-        print()
-        print()
+                print()
+                print()
 
-        # 페이지 별 스크린 샷 저장
-        # browser.save_screenshot('./target_page{}.png'.format(cur_page))
+                # 페이지 별 스크린 샷 저장
+                # browser.save_screenshot('./target_page{}.png'.format(cur_page))
 
-        # BeautifulSoup 인스턴스 삭제
-        del soup
+                # BeautifulSoup 인스턴스 삭제
+                del soup
 
-    # 브라우저 종료
-    browser.close()
+        finally:
+            # 브라우저 종료
+            browser.quit()
 
     return result
 
