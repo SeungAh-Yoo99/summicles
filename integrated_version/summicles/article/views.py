@@ -17,17 +17,6 @@ from .serializers import ArticleSerializer
 # class SearchFormView():
 #     form_class = SearchForm
 
-class FrontAppView(View):
-    def get(self, request):
-        try:
-            with open(os.path.join(str(settings.ROOT_DIR),
-                                    'front',
-                                    'build',
-                                    'index.html')) as file:
-                return HttpResponse(file.read())
-
-        except:
-            return HttpResponse(status=501,)
 
 class MainAPI(generics.GenericAPIView, mixins.ListModelMixin):
     queryset = Article.objects.all()

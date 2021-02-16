@@ -7,15 +7,15 @@ const goForeign = document.querySelector("#foreign")
 const goDigital = document.querySelector("#digital");
 //카테고리 클릭 시 해당 카테고리 기사들로 이동. 
 //초기값은 main으로 설정. 
-let moveUrl = 'http://ysa8497.pythonanywhere.com/summicles/main/';
-const urlMain = 'http://ysa8497.pythonanywhere.com/summicles/main/';
-const urlPolitics = 'http://ysa8497.pythonanywhere.com/summicles/politics/';
-const urlEconomic = 'http://ysa8497.pythonanywhere.com/summicles/economic/';
-const urlSociety = 'http://ysa8497.pythonanywhere.com/summicles/society/';
-const urlCulture = 'http://ysa8497.pythonanywhere.com/summicles/culture/';
-const urlForeign = 'http://ysa8497.pythonanywhere.com/summicles/foreign/';
-const urlDigital = 'http://ysa8497.pythonanywhere.com/summicles/digital/';
-const urlSearch = 'http://ysa8497.pythonanywhere.com/summicles/main/?search=';
+let moveUrl = 'http://ysa8497.pythonanywhere.com/api/';
+const urlMain = 'http://ysa8497.pythonanywhere.com/api/';
+const urlPolitics = 'http://ysa8497.pythonanywhere.com/api/politics/';
+const urlEconomic = 'http://ysa8497.pythonanywhere.com/api/economic/';
+const urlSociety = 'http://ysa8497.pythonanywhere.com/api/society/';
+const urlCulture = 'http://ysa8497.pythonanywhere.com/api/culture/';
+const urlForeign = 'http://ysa8497.pythonanywhere.com/api/foreign/';
+const urlDigital = 'http://ysa8497.pythonanywhere.com/api/digital/';
+const urlSearch = 'http://ysa8497.pythonanywhere.com/api/?search=';
 
 const inputSearch = document.querySelector('#search');
 const searchNum = document.querySelector('.search-number');

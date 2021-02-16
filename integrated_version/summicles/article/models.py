@@ -9,7 +9,9 @@ class Article(models.Model):
     contents = models.TextField()
     crawl_time = models.CharField(max_length=128, blank=True, null=True)
     newspaper = models.CharField(max_length=64, blank=True, null=True)
+    headline = models.CharField(max_length=255, null=True)
     tag = models.CharField(max_length=128, blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
 
     class Meta:
         # managed = False
