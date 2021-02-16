@@ -1,12 +1,4 @@
 from django.db import models
-# from django.conf import settings
-# import django
-
-# if not settings.configured:
-#     settings.configure()
-# django.setup()
-# # Create your models here.
-
 
 class Article(models.Model):
     link = models.CharField(primary_key=True, max_length=255)
@@ -19,8 +11,6 @@ class Article(models.Model):
     newspaper = models.CharField(max_length=64, blank=True, null=True)
     tag = models.CharField(max_length=128, blank=True, null=True)
 
-    # summary = models.TextField()
-    # tag = models.CharField(max_length=128)
     class Meta:
         # managed = False
         db_table = 'article'
